@@ -25,15 +25,21 @@ async function createPaste(env, content, isPrivate, expire, short, createDate, p
     }
   }
 
-  await env.PB.put(short, content, {
-    expirationTtl: expire,
+  let options = {
     metadata: {
       postedAt: createDate,
       passwd: passwd,
       filename: filename,
       lastModified: now,
     },
-  })
+  }
+
+  if (!isNan(expire)) {
+    options.expirationTtl = expire
+  }
+
+  await env.PB.put(short, content, options)
+
   let accessUrl = env.BASE_URL + "/" + short
   const adminUrl = env.BASE_URL + "/" + short + params.SEP + passwd
   return {
@@ -101,10 +107,7 @@ export async function handlePostOrPut(request, env, ctx, isPut) {
   let expirationSeconds = undefined
   if (expire !== undefined) {
     expirationSeconds = parseExpiration(expire)
-    if (isNaN(expirationSeconds)) {
-      throw new WorkerError(400, `cannot parse expire ${expirationSeconds} as an number`)
-    }
-    if (expirationSeconds < 60) {
+    if (!isNan(expirationSeconds) && expirationSeconds < 60) {
       throw new WorkerError(
         400,
         `due to limitation of Cloudflare, expire should be a integer greater than 60, '${expirationSeconds}' given`,

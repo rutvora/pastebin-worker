@@ -68,7 +68,7 @@ window.addEventListener('DOMContentLoaded', () => {
   let customName = '', adminUrl = '', file = null
 
   const NAME_REGEX = /^[a-zA-Z0-9+_\-\[\]*$@,;]{3,}$/
-  const EXPIRE_REGEX = /^\d+\s*[smhdwM]?$/
+  const EXPIRE_REGEX = /^\d+\s*[smhdwMY]?$/
   const submitButton = $('#submit-button')
   const deleteButton = $('#delete-button')
   const pasteEditArea = $('#paste-textarea')
@@ -83,7 +83,10 @@ window.addEventListener('DOMContentLoaded', () => {
     const pasteNotEmpty = inputType === 'edit'
       ? pasteEditArea.prop('value').length > 0
       : file !== null
-    const expirationValid = EXPIRE_REGEX.test(expiration)  // TODO: verify it
+    expirationValid = EXPIRE_REGEX.test(expiration)  // TODO: verify it
+    if (!expiration) {
+      expirationValid = true
+    }
     const nameValid = urlType !== 'custom' || NAME_REGEX.test(customName)
     const adminUrlValid = urlType !== 'admin' || isAdminUrlLegal(adminUrl)
 
