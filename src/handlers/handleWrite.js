@@ -34,7 +34,7 @@ async function createPaste(env, content, isPrivate, expire, short, createDate, p
     },
   }
 
-  if (!isNan(expire)) {
+  if (!isNaN(expire)) {
     options.expirationTtl = expire
   }
 
