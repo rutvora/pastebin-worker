@@ -107,7 +107,7 @@ export async function handlePostOrPut(request, env, ctx, isPut) {
   let expirationSeconds = undefined
   if (expire !== undefined) {
     expirationSeconds = parseExpiration(expire)
-    if (!isNan(expirationSeconds) && expirationSeconds < 60) {
+    if (!isNaN(expirationSeconds) && expirationSeconds < 60) {
       throw new WorkerError(
         400,
         `due to limitation of Cloudflare, expire should be a integer greater than 60, '${expirationSeconds}' given`,
