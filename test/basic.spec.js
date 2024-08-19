@@ -127,7 +127,7 @@ test("expire", async () => {
   await testExpireParse("100m", 6000)
   await testExpireParse("100h", 360000)
   await testExpireParse("1d", 86400)
-  await testExpireParse("1M", 18144000)
+  await testExpireParse("1M", 2592000)
   await testExpireParse("100  m", 6000)
 
   const testFailParse = async (expire) => {
