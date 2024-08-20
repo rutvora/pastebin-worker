@@ -83,7 +83,7 @@ window.addEventListener('DOMContentLoaded', () => {
     const pasteNotEmpty = inputType === 'edit'
       ? pasteEditArea.prop('value').length > 0
       : file !== null
-    expirationValid = EXPIRE_REGEX.test(expiration)  // TODO: verify it
+    let expirationValid = EXPIRE_REGEX.test(expiration)  // TODO: verify it
     if (!expiration) {
       expirationValid = true
     }
