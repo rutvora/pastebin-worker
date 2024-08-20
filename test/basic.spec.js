@@ -128,7 +128,9 @@ test("expire", async () => {
   await testExpireParse("100h", 360000)
   await testExpireParse("1d", 86400)
   await testExpireParse("1M", 2592000)
+  await testExpireParse("1Y", 31536000)
   await testExpireParse("100  m", 6000)
+  await testExpireParse("", null)
 
   const testFailParse = async (expire) => {
     const uploadResponse = await workerFetch(new Request(BASE_URL, {
