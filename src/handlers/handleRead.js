@@ -4,7 +4,7 @@ import { verifyAuth } from "../auth.js"
 import { getType } from "mime/lite.js"
 import { makeMarkdown } from "../pages/markdown.js"
 import { makeHighlight } from "../pages/highlight.js"
-import adminHtml from "../../frontend/admin.html"
+import listHtml from "../../frontend/list.html"
 import styleCss from "../../frontend/style.css"
 
 function staticPageCacheHeader(env) {
@@ -26,18 +26,16 @@ async function generatePasteList(env) {
   let pastes = await env.PB.list()
   pastes = pastes["keys"]
 
-  let table = "<table class='paste_list' border='1'>"
-  table += "<tr><th>Paste Name</th><th>Expiration</th></tr>";
+  let table = ""
   pastes.forEach(paste => {
     table += `<tr><td><a href="${env.BASE_URL}/${paste.name}">${paste.name}</td><td>${paste.expiration}</td></tr>`;
   })
 
-  table += "</table>"
   return table
 }
 
-async function generateAdminPage(env) {
-  return adminHtml
+async function generateListPage(env) {
+  return listHtml
     .replace("{{CSS}}", styleCss)
     .replace("{{PASTE_LIST}}", await generatePasteList(env))
 }
@@ -48,8 +46,8 @@ export async function handleGet(request, env, ctx) {
 
   if (url.pathname === "/favicon.ico" && env.FAVICON) {
     return Response.redirect(env.FAVICON)
-  } else if (url.pathname === "/admin" || url.pathname === "/admin.html") {
-    return new Response(await generateAdminPage(env), {
+  } else if (url.pathname === "/list" || url.pathname === "/list.html") {
+    return new Response(await generateListPage(env), {
       headers: { "content-type": "text/html;charset=UTF-8", ...staticPageCacheHeader(env) },
     })
   }

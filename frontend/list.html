@@ -10,7 +10,10 @@
 </head>
 <html lang='en'>
 <body>
-{{PASTE_LIST}}
+  <table class="paste-list" id="paste-list">
+    "<tr><th>Paste Name</th><th>Expiration</th></tr>"
+    {{PASTE_LIST}}
+  </table>
 <footer class='px-3 my-2 text-center'>
     <p>
         <a href='{{BASE_URL}}/tos' class='d-inline-block'>Terms & Conditions</a>
@@ -20,7 +23,19 @@
 </footer>
 <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js'></script>
 <script>
-    {{INDEX_JS}}
+function convertEpochToReadableTime(epochSeconds) {
+  const date = new Date(epochSeconds * 1000);
+  if (isNaN(date)) return "N/A"
+  const options = { month: 'short', day: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit', hour12: true };
+  return date.toLocaleString('en-US', options).replace(',', '');
+}
+
+const table = document.getElementById('paste-list');
+
+for (let i = 1; i < table.rows.length; i++) {
+  table.rows[i].cells[1].textContent = convertEpochToReadableTime(table.rows[i].cells[1].textContent)
+}
+
 </script>
 </body>
 </html>
