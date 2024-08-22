@@ -36,7 +36,7 @@ async function generatePasteList(env) {
 }
 
 async function generateAdminPage(env) {
-  return adminPage
+  return adminHtml
     .replace("{{CSS}}", styleCss)
     .replace("{{PASTE_LIST}}", await generatePasteList(env))
 }
