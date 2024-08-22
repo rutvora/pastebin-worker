@@ -29,7 +29,7 @@ async function generatePasteList(env) {
   let table = "<table border='1'>"
 
   pastes.forEach(paste => {
-    table += `<tr><td>${paste.name}</td><td>${paste.expiration}</td></tr>`;
+    table += `<tr><td><a href="${env.BASE_URL}/${paste.name}">${paste.name}</td><td>${paste.expiration}</td></tr>`;
   })
 
   table += "</table>"
