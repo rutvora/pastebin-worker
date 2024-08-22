@@ -5,6 +5,7 @@ import { getType } from "mime/lite.js"
 import { makeMarkdown } from "../pages/markdown.js"
 import { makeHighlight } from "../pages/highlight.js"
 import adminHtml from "../../frontend/admin.html"
+import styleCss from "../../frontend/style.css"
 
 function staticPageCacheHeader(env) {
   const age = env.CACHE_STATIC_PAGE_AGE
