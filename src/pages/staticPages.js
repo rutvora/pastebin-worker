@@ -1,31 +1,10 @@
 import { makeMarkdown } from "./markdown.js"
 
 import indexHtml from "../../frontend/index.html"
-import adminHtml from "../../frontend/admin.html"
 import styleCss from "../../frontend/style.css"
 import indexJs from "../../frontend/index.client.js"
 import tosMd from "../../frontend/tos.md"
 import apiMd from "../../doc/api.md"
-
-function generatePasteList(env) {
-  let pastes = await env.PB.list()
-  pastes = pastes["keys"]
-
-  let table = "<table border='1'>"
-
-  pastes.forEach(paste => {
-    table += `<tr><td>${paste.name}</td><td>${paste.expiration}</td></tr>`;
-  })
-
-  table += "</table>"
-  return table
-}
-
-function adminPage(env) {
-  return adminPage
-    .replace("{{CSS}}", styleCss)
-    .replace("{{PASTE_LIST}}", generatePasteList(env))
-}
 
 function indexPage(env) {
   return indexHtml
@@ -48,8 +27,6 @@ export function getStaticPage(path, env) {
     return makeMarkdown(tosMdRenderred)
   } else if (path === "/api" || path === "/api.html") {
     return makeMarkdown(apiMd)
-  } else if (path === "/admin" || path === "/admin.html") {
-    return adminPage(env)
   } else {
     return null
   }

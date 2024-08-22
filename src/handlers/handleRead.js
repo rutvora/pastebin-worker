@@ -4,6 +4,7 @@ import { verifyAuth } from "../auth.js"
 import { getType } from "mime/lite.js"
 import { makeMarkdown } from "../pages/markdown.js"
 import { makeHighlight } from "../pages/highlight.js"
+import adminHtml from "../../frontend/admin.html"
 
 function staticPageCacheHeader(env) {
   const age = env.CACHE_STATIC_PAGE_AGE
@@ -20,12 +21,36 @@ function lastModifiedHeader(paste) {
   return lastModified ? { "last-modified": new Date(lastModified).toGMTString() } : {}
 }
 
+async function generatePasteList(env) {
+  let pastes = await env.PB.list()
+  pastes = pastes["keys"]
+
+  let table = "<table border='1'>"
+
+  pastes.forEach(paste => {
+    table += `<tr><td>${paste.name}</td><td>${paste.expiration}</td></tr>`;
+  })
+
+  table += "</table>"
+  return table
+}
+
+async function generateAdminPage(env) {
+  return adminPage
+    .replace("{{CSS}}", styleCss)
+    .replace("{{PASTE_LIST}}", await generatePasteList(env))
+}
+
 export async function handleGet(request, env, ctx) {
   const url = new URL(request.url)
   const { role, short, ext, passwd, filename } = parsePath(url.pathname)
 
   if (url.pathname === "/favicon.ico" && env.FAVICON) {
     return Response.redirect(env.FAVICON)
+  } else if (url.pathname === "/admin" || url.pathname === "/admin.html") {
+    return new Response(await generateAdminPage(env), {
+      headers: { "content-type": "text/html;charset=UTF-8", ...staticPageCacheHeader(env) },
+    })
   }
 
   // return the editor for admin URL
