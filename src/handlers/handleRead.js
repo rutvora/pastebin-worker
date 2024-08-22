@@ -26,8 +26,8 @@ async function generatePasteList(env) {
   let pastes = await env.PB.list()
   pastes = pastes["keys"]
 
-  let table = "<table border='1'>"
-
+  let table = "<table class='paste_list' border='1'>"
+  table += "<tr><th>Paste Name</th><th>Expiration</th></tr>";
   pastes.forEach(paste => {
     table += `<tr><td><a href="${env.BASE_URL}/${paste.name}">${paste.name}</td><td>${paste.expiration}</td></tr>`;
   })
