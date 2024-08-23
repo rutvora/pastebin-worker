@@ -46,14 +46,13 @@ export async function handleGet(request, env, ctx) {
 
   if (url.pathname === "/favicon.ico" && env.FAVICON) {
     return Response.redirect(env.FAVICON)
-  } else if (url.pathname === "/list" || url.pathname === "/list.html") {
-    return new Response(await generateListPage(env), {
-      headers: { "content-type": "text/html;charset=UTF-8", ...staticPageCacheHeader(env) },
-    })
   }
-
-  // return the editor for admin URL
-  const staticPageContent = getStaticPage((passwd.length > 0) ? "/" : url.pathname, env)
+  let staticPageContent
+  if (url.pathname === "/list" || url.pathname === "/list.html") {
+    staticPageContent = await generateListPage(env)
+  } else {
+    staticPageContent = getStaticPage(passwd.length > 0 ? "/" : url.pathname, env);
+  }
   if (staticPageContent) {
     // access to all static pages requires auth
     const authResponse = verifyAuth(request, env)
